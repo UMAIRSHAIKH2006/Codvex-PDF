@@ -84,6 +84,13 @@ nav {
   text-decoration: none;
   flex-shrink: 0;
 }
+.nav-logo-img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: white;
+}
 .nav-logo em { color: var(--accent); font-style: normal; }
 
 .logo-icon {
