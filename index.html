@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Codvex PDF Tools — Simple. Fast. Free.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════ AUTH MODAL ═══════════════════ -->
+<div id="auth-overlay" class="auth-overlay hidden">
+  <div class="auth-modal">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+
+    <div class="auth-logo">
+      <div class="logo-icon-sm">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+          <rect x="2" y="2" width="6" height="7" rx="1.5" fill="white"/>
+          <rect x="10" y="2" width="6" height="5" rx="1.5" fill="white" opacity="0.7"/>
+          <rect x="2" y="11" width="6" height="5" rx="1.5" fill="white" opacity="0.7"/>
+          <rect x="10" y="9" width="6" height="7" rx="1.5" fill="white"/>
+        </svg>
+      </div>
+      <span>Codvex <em>PDF</em></span>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Log In</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="form-login" class="auth-form">
+      <p class="auth-welcome">Welcome back 👋</p>
+      <div class="auth-field">
+        <label>Email address</label>
+        <input type="email" id="login-email" placeholder="you@example.com" />
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Your password" />
+        <span class="auth-hint" onclick="forgotPassword()">Forgot password?</span>
+      </div>
+      <div class="auth-error hidden" id="login-error"></div>
+      <button class="btn-auth" onclick="doLogin()">Log In →</button>
+      <p class="auth-switch">No account? <a onclick="switchTab('signup')">Create one free</a></p>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="form-signup" class="auth-form hidden">
+      <p class="auth-welcome">Create your free account ✨</p>
+      <div class="auth-field">
+        <label>Your name</label>
+        <input type="text" id="signup-name" placeholder="First name" />
+      </div>
+      <div class="auth-field">
+        <label>Email address</label>
+        <input type="email" id="signup-email" placeholder="you@example.com" />
+      </div>
+      <div class="auth-field">
+        <label>Create a password</label>
+        <input type="password" id="signup-password" placeholder="At least 6 characters" />
+      </div>
+      <div class="auth-error hidden" id="signup-error"></div>
+      <button class="btn-auth" onclick="doSignup()">Create Free Account →</button>
+      <p class="auth-switch">Already have one? <a onclick="switchTab('login')">Log in</a></p>
+    </div>
+
+    <div class="auth-trust">
+      <span>🔒 100% Secure</span>
+      <span>·</span>
+      <span>No spam ever</span>
+      <span>·</span>
+      <span>Free forever</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav id="main-nav">
+  <a class="nav-logo" href="#" onclick="showHome()">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect x="2" y="2" width="6" height="7" rx="1.5" fill="white"/>
+        <rect x="10" y="2" width="6" height="5" rx="1.5" fill="white" opacity="0.7"/>
+        <rect x="2" y="11" width="6" height="5" rx="1.5" fill="white" opacity="0.7"/>
+        <rect x="10" y="9" width="6" height="7" rx="1.5" fill="white"/>
+      </svg>
+    </div>
+    Codvex <em>PDF</em>
+  </a>
+
+  <div class="nav-links">
+    <a href="#tools" onclick="showHome()">Tools</a>
+    <a href="#how" onclick="showHome()">How it works</a>
+    <a href="#pricing" onclick="showHome()">Pricing</a>
+  </div>
+
+  <!-- Guest Nav -->
+  <div class="nav-auth" id="nav-guest">
+    <button class="btn-nav-ghost" onclick="openAuth('login')">Log In</button>
+    <button class="btn-nav-solid" onclick="openAuth('signup')">Sign Up Free</button>
+  </div>
+
+  <!-- Logged-in Nav -->
+  <div class="nav-auth hidden" id="nav-user">
+    <div class="nav-user-info" id="nav-user-info">
+      <div class="user-avatar" id="nav-avatar">U</div>
+      <span id="nav-username">User</span>
+    </div>
+    <button class="btn-nav-ghost" onclick="doLogout()">Log Out</button>
+  </div>
+
+  <button class="hamburger" onclick="toggleMobileNav()" id="hamburger">☰</button>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav hidden" id="mobile-nav">
+  <a href="#tools" onclick="showHome();closeMobileNav()">Tools</a>
+  <a href="#how" onclick="showHome();closeMobileNav()">How it works</a>
+  <a href="#pricing" onclick="showHome();closeMobileNav()">Pricing</a>
+  <div class="mobile-nav-auth" id="mobile-guest">
+    <button onclick="openAuth('login');closeMobileNav()">Log In</button>
+    <button class="solid" onclick="openAuth('signup');closeMobileNav()">Sign Up Free</button>
+  </div>
+  <div class="mobile-nav-auth hidden" id="mobile-user">
+    <span id="mobile-username">User</span>
+    <button onclick="doLogout();closeMobileNav()">Log Out</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ HOME PAGE ═══════════════════ -->
+<div id="home-page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-blob blob-1"></div>
+    <div class="hero-bg-blob blob-2"></div>
+    <div class="hero-bg-blob blob-3"></div>
+
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="badge-pulse"></span>
+        No signup · 100% Free · Instant Results
+      </div>
+
+      <h1>Your PDF tasks,<br><em>done in seconds</em></h1>
+
+      <p class="hero-sub">Add your file, pick a tool, get it back. That's it.<br>No confusing steps. No waiting. No account needed.</p>
+
+      <div class="hero-ctas">
+        <button class="btn-primary hero-cta" onclick="openTool('merge')">
+          Add Your File & Start 🚀
+        </button>
+        <button class="btn-ghost" onclick="document.getElementById('tools').scrollIntoView({behavior:'smooth'})">
+          See All Tools ↓
+        </button>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-pill">🔒 Files auto-deleted after 1hr</div>
+        <div class="trust-pill">⚡ Results in under 10 seconds</div>
+        <div class="trust-pill">📱 Works on any device</div>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">12M<sup>+</sup></div><div class="stat-label">Files Processed</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Happy Users</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-num">150<sup>+</sup></div><div class="stat-label">Countries</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Avg Rating</div></div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section" id="tools">
+    <div class="section-inner">
+      <div class="section-label">Pick a tool</div>
+      <h2 class="section-title">What do you want to do<br>with your PDF?</h2>
+      <p class="section-sub">Click any tool below — it takes less than 30 seconds from start to finish.</p>
+
+      <div class="tools-grid">
+
+        <button class="tool-card" onclick="openTool('merge')">
+          <div class="tool-card-inner">
+            <div class="tool-emoji">📎</div>
+            <div class="tool-info">
+              <div class="tool-name">Merge PDFs</div>
+              <div class="tool-tagline">Combine 2 or more PDFs into 1 file</div>
+            </div>
+            <div class="tool-arrow">→</div>
+          </div>
+          <div class="tool-steps">Step 1: Add files → Step 2: Merge → Done!</div>
+        </button>
+
+        <button class="tool-card" onclick="openTool('split')">
+          <div class="tool-card-inner">
+            <div class="tool-emoji">✂️</div>
+            <div class="tool-info">
+              <div class="tool-name">Split PDF</div>
+              <div class="tool-tagline">Pull out specific pages from your PDF</div>
+            </div>
+            <div class="tool-arrow">→</div>
+          </div>
+          <div class="tool-steps">Step 1: Add file → Step 2: Choose pages → Done!</div>
+        </button>
+
+        <button class="tool-card" onclick="openTool('compress')">
+          <div class="tool-card-inner">
+            <div class="tool-emoji">🪄</div>
+            <div class="tool-info">
+              <div class="tool-name">Make PDF Smaller</div>
+              <div class="tool-tagline">Shrink file size without losing quality</div>
+            </div>
+            <div class="tool-arrow">→</div>
+          </div>
+          <div class="tool-steps">Step 1: Add file → Step 2: Compress → Done!</div>
+        </button>
+
+        <button class="tool-card" onclick="openTool('pdfword')">
+          <div class="tool-card-inner">
+            <div class="tool-emoji">📝</div>
+            <div class="tool-info">
+              <div class="tool-name">PDF → Word</div>
+              <div class="tool-tagline">Convert your PDF into an editable Word doc</div>
+            </div>
+            <div class="tool-arrow">→</div>
+          </div>
+          <div class="tool-steps">Step 1: Add PDF → Step 2: Convert → Done!</div>
+        </button>
+
+        <button class="tool-card" onclick="openTool('jpgpdf')">
+          <div class="tool-card-inner">
+            <div class="tool-emoji">🖼️</div>
+            <div class="tool-info">
+              <div class="tool-name">Photos → PDF</div>
+              <div class="tool-tagline">Turn your images into a PDF in one click</div>
+            </div>
+            <div class="tool-arrow">→</div>
+          </div>
+          <div class="tool-steps">Step 1: Add images → Step 2: Create PDF → Done!</div>
+        </button>
+
+      </div>
+
+      <!-- Guest usage notice -->
+      <div class="usage-notice" id="usage-notice-home">
+        <div class="usage-notice-inner">
+          <span>👤 You're using as a <strong>Guest</strong> — 3 free tasks per hour</span>
+          <button onclick="openAuth('signup')">Get unlimited access free →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section how-section" id="how">
+    <div class="section-inner">
+      <div class="section-label">How it works</div>
+      <h2 class="section-title">Three steps.<br>Done in under a minute.</h2>
+
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-num-badge">1</div>
+          <div class="step-icon">📁</div>
+          <div class="step-name">Add your file</div>
+          <p class="step-text">Drag & drop your file or tap to pick from your phone or computer. Works with any PDF.</p>
+        </div>
+        <div class="step-connector">→</div>
+        <div class="step-card">
+          <div class="step-num-badge">2</div>
+          <div class="step-icon">⚙️</div>
+          <div class="step-name">We handle it</div>
+          <p class="step-text">Our system works on your file immediately — usually done in under 10 seconds.</p>
+        </div>
+        <div class="step-connector">→</div>
+        <div class="step-card">
+          <div class="step-num-badge">3</div>
+          <div class="step-icon">⬇️</div>
+          <div class="step-name">Download result</div>
+          <p class="step-text">Tap download and you're done. Your file is deleted from our servers after 1 hour.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES / WHY -->
+  <section class="section why-section">
+    <div class="section-inner">
+      <div class="section-label">Why Codvex?</div>
+      <h2 class="section-title">Built to be simple.<br>Made for everyone.</h2>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <h3>Fast as a flash</h3>
+          <p>Your file is ready in seconds — even on slow internet. No queues, no waiting.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🔒</div>
+          <h3>Your files stay private</h3>
+          <p>Everything is encrypted. We never look at your files, and they're gone after 1 hour.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">📱</div>
+          <h3>Works on your phone</h3>
+          <p>On a phone, tablet, or laptop — Codvex looks and works great on every screen size.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🆓</div>
+          <h3>Free. No tricks.</h3>
+          <p>No hidden fees. No credit card. Core tools are always free, no strings attached.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section pricing-section" id="pricing">
+    <div class="section-inner">
+      <div class="section-label" style="text-align:center">Pricing</div>
+      <h2 class="section-title" style="text-align:center">Simple pricing.<br>No surprises.</h2>
+      <p class="section-sub" style="text-align:center;max-width:440px;margin:0 auto 48px">Free forever plan included. Upgrade only if you need more.</p>
+
+      <div class="pricing-row">
+        <div class="pricing-card">
+          <div class="plan-name">Free</div>
+          <div class="plan-price">$0</div>
+          <div class="plan-period">Always free, no card needed</div>
+          <ul class="plan-features">
+            <li class="yes">All 5 PDF tools</li>
+            <li class="yes">Up to 25MB per file</li>
+            <li class="yes">3 tasks per hour</li>
+            <li class="no">Batch processing</li>
+            <li class="no">Priority speed</li>
+          </ul>
+          <button class="btn-plan outline" onclick="openTool('merge')">Start for Free</button>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="plan-badge">Most Popular</div>
+          <div class="plan-name">Premium</div>
+          <div class="plan-price">$9<span>.99</span></div>
+          <div class="plan-period">per month</div>
+          <ul class="plan-features">
+            <li class="yes">All 5 PDF tools</li>
+            <li class="yes">Up to 500MB per file</li>
+            <li class="yes">Unlimited tasks</li>
+            <li class="yes">Batch processing</li>
+            <li class="yes">Priority speed</li>
+          </ul>
+          <button class="btn-plan solid" onclick="openAuth('signup')">Get Premium</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">Reviews</div>
+      <h2 class="section-title">Loved by 12 million people.</h2>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Merged 8 PDFs in under 10 seconds. No other tool is this fast."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c)">AS</div>
+            <div>
+              <div class="review-name">Anjali Sharma</div>
+              <div class="review-role">Project Manager, TCS</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Skeptical at first but genuinely impressed. PDF to Word conversion is spot-on."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">MK</div>
+            <div>
+              <div class="review-name">Marcus Kim</div>
+              <div class="review-role">Freelance Designer</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p>"Drag, drop, done. No account, no nonsense. This is how all tools should work."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">PR</div>
+            <div>
+              <div class="review-name">Priya Rajan</div>
+              <div class="review-role">Law Associate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="nav-logo footer-logo" href="#" onclick="showHome()">
+          <div class="logo-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="2" width="6" height="7" rx="1.5" fill="white"/>
+              <rect x="10" y="2" width="6" height="5" rx="1.5" fill="white" opacity="0.7"/>
+              <rect x="2" y="11" width="6" height="5" rx="1.5" fill="white" opacity="0.7"/>
+              <rect x="10" y="9" width="6" height="7" rx="1.5" fill="white"/>
+            </svg>
+          </div>
+          Codvex <em>PDF</em>
+        </a>
+        <p>Fast, free PDF tools for everyone. No account needed, no nonsense.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Tools</h4>
+          <a href="#" onclick="openTool('merge');return false;">Merge PDF</a>
+          <a href="#" onclick="openTool('split');return false;">Split PDF</a>
+          <a href="#" onclick="openTool('compress');return false;">Compress PDF</a>
+          <a href="#" onclick="openTool('pdfword');return false;">PDF to Word</a>
+          <a href="#" onclick="openTool('jpgpdf');return false;">JPG to PDF</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+          <a href="#">API Docs</a>
+        </div>
+        <div class="footer-col">
+          <h4>Help</h4>
+          <a href="#">Support</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">GDPR</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Codvex PDF Tools. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="#">Twitter</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /home-page -->
+
+
+<!-- ═══════════════════ TOOL PAGE ═══════════════════ -->
+<div id="tool-page" class="hidden">
+
+  <div class="tool-page-wrap">
+    <button class="back-btn" onclick="showHome()">
+      ← Back to all tools
+    </button>
+
+    <div class="tool-page-header">
+      <div class="tool-page-emoji" id="tool-emoji">📎</div>
+      <div>
+        <div class="tool-page-tag" id="tool-tag">Merge PDF</div>
+        <h2 id="tool-title">Merge PDF Files</h2>
+        <p id="tool-desc">Combine two or more PDF files into one. Easy as 1-2-3.</p>
+      </div>
+    </div>
+
+    <!-- Usage bar for guest -->
+    <div class="usage-bar" id="usage-bar">
+      <span>👤 Guest: <strong id="tasks-left">3</strong> free tasks left this hour</span>
+      <button onclick="openAuth('signup')">Get unlimited →</button>
+    </div>
+
+    <!-- UPLOAD AREA -->
+    <div class="upload-zone" id="upload-area" onclick="triggerFileInput()">
+      <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="handleFiles(this.files)">
+      <div class="upload-zone-icon">📂</div>
+      <div class="upload-zone-title">Add your file here</div>
+      <div class="upload-zone-sub">Drag & drop, or tap to pick from your device</div>
+      <div class="upload-formats">
+        <span>PDF</span><span>JPG</span><span>PNG</span><span>DOCX</span>
+      </div>
+      <div class="upload-limit">Up to 25MB · Files are 100% private</div>
+    </div>
+
+    <!-- FILE LIST -->
+    <div class="file-list" id="file-list"></div>
+
+    <!-- ACTION BAR -->
+    <div class="action-bar" id="action-bar" style="display:none">
+      <div class="action-bar-left">
+        <span class="file-count" id="file-count-label">1 file selected</span>
+        <button class="clear-btn" onclick="clearFiles()">Remove all</button>
+      </div>
+      <button class="btn-primary btn-process" id="process-btn" onclick="startProcessing()">
+        <span id="process-btn-text">🔀 Merge PDF</span>
+      </button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-card hidden" id="progress-wrap">
+      <div class="progress-status-row">
+        <span id="progress-status">Working on your file…</span>
+        <span class="progress-pct" id="progress-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-step-text" id="progress-step">Getting your file ready…</div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-card hidden" id="success-wrap">
+      <div class="success-checkmark">
+        <div class="checkmark-circle">✓</div>
+      </div>
+      <h3 class="success-title">Your file is ready! 🎉</h3>
+      <p class="success-sub" id="success-sub">merged_document.pdf · Ready to download</p>
+      <button class="btn-download" onclick="simulateDownload()">
+        ⬇ Download Your File
+      </button>
+      <p class="success-note">File will be automatically deleted after 1 hour for your privacy.</p>
+      <button class="btn-another" onclick="clearFiles()">Process another file →</button>
+    </div>
+
+  </div><!-- /tool-page-wrap -->
+</div><!-- /tool-page -->
+
+<script src="script.js"></script>
+</body>
+</html>
