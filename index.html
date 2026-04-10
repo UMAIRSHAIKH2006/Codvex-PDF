@@ -325,7 +325,7 @@
       <div class="pricing-row">
         <div class="pricing-card">
           <div class="plan-name">Free</div>
-          <div class="plan-price">$0</div>
+          <div class="plan-price">₹0</div>
           <div class="plan-period">Always free, no card needed</div>
           <ul class="plan-features">
             <li class="yes">All 5 PDF tools</li>
@@ -340,7 +340,7 @@
         <div class="pricing-card featured">
           <div class="plan-badge">Most Popular</div>
           <div class="plan-name">Premium</div>
-          <div class="plan-price">$9<span>.99</span></div>
+          <div class="plan-price">₹830</div>
           <div class="plan-period">per month</div>
           <ul class="plan-features">
             <li class="yes">All 5 PDF tools</li>
@@ -478,7 +478,7 @@
     </div>
 
     <!-- UPLOAD AREA -->
-    <div class="upload-zone" id="upload-area" onclick="triggerFileInput()">
+    <label class="upload-zone" id="upload-area" for="file-input">
       <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="handleFiles(this.files)">
       <div class="upload-zone-icon">📂</div>
       <div class="upload-zone-title">Add your file here</div>
@@ -487,7 +487,7 @@
         <span>PDF</span><span>JPG</span><span>PNG</span><span>DOCX</span>
       </div>
       <div class="upload-limit">Up to 25MB · Files are 100% private</div>
-    </div>
+    </label>
 
     <!-- FILE LIST -->
     <div class="file-list" id="file-list"></div>

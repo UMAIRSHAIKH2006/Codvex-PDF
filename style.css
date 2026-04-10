@@ -4,39 +4,42 @@
 ═══════════════════════════════════════ */
 
 :root {
-  --bg: #f8f7f4;
-  --surface: #ffffff;
-  --surface-2: #f2f0ec;
-  --border: #e5e2db;
-  --border-soft: #ede9e1;
+  --bg: #0f172a; /* 🔥 NEW DARK BACKGROUND */
 
-  --text: #1a1714;
-  --text-2: #5a5550;
-  --text-3: #9a9490;
+  --surface: #1e293b;
+  --surface-2: #334155;
+  --border: #475569;
+  --border-soft: #64748b;
+  --heading: var(--text);
 
-  --accent: #e8521a;
-  --accent-hover: #d14715;
-  --accent-light: #fff1ec;
-  --accent-border: #ffd5c0;
+  --text: #f1f5f9;
+  --text-2: #cbd5f5;
+  --text-3: #94a3b8;
 
-  --green: #1b9e5a;
-  --green-light: #edfaf3;
-  --red: #d63b3b;
+  --accent: #38bdf8;
+  --accent-hover: #0ea5e9;
+  --accent-light: #1e3a8a;
+  --accent-border: #3b82f6;
+
+  --green: #22c55e;
+  --green-light: #052e16;
+  --red: #ef4444;
 
   --nav-h: 68px;
   --radius: 16px;
   --radius-sm: 10px;
   --radius-lg: 24px;
 
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-  --shadow: 0 4px 20px rgba(0,0,0,0.09);
-  --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.6);
 
   --font-display: 'Bricolage Grotesque', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
 
   --transition: 0.2s ease;
 }
+
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -63,10 +66,13 @@ nav {
   top: 0;
   z-index: 100;
   height: var(--nav-h);
-  background: rgba(248,247,244,0.92);
+
+  background: rgba(15, 23, 42, 0.7); /* 🔥 dark glass */
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+
   border-bottom: 1px solid var(--border);
+
   display: flex;
   align-items: center;
   padding: 0 clamp(16px, 4vw, 48px);
@@ -786,7 +792,15 @@ nav {
 .usage-notice-inner button:hover { text-decoration: underline; }
 
 /* ═══════════════════ HOW IT WORKS ═══════════════════ */
-.how-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.how-section {
+  background: linear-gradient(135deg, rgba(30,41,59,0.8), rgba(2,6,23,0.9));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+
+  backdrop-filter: blur(12px);
+  padding: 60px 20px;
+  position: relative;
+}
 
 .steps-row {
   display: flex;
@@ -875,8 +889,14 @@ nav {
 }
 
 /* ═══════════════════ PRICING ═══════════════════ */
-.pricing-section { background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+/* PRICING SECTION */
+.pricing-section {
+  background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(2,6,23,0.95));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
 
+/* ROW */
 .pricing-row {
   display: flex;
   gap: 20px;
@@ -884,18 +904,79 @@ nav {
   flex-wrap: wrap;
 }
 
+/* CARD */
 .pricing-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 36px;
-  width: 300px;
-  flex-shrink: 0;
-  position: relative;
+  background: rgba(30, 41, 59, 0.55);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 25px;
+  width: 280px;
+  text-align: center;
+  backdrop-filter: blur(14px);
+  transition: 0.3s ease;
+  color: var(--text);
 }
-.pricing-card.featured {
+
+/* CARD HOVER */
+.pricing-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 30px rgba(56,189,248,0.25);
   border-color: var(--accent);
-  box-shadow: 0 8px 32px rgba(232,82,26,0.14);
+}
+
+/* FEATURED CARD (HIGHLIGHT) */
+.pricing-card.featured {
+  border: 1.5px solid var(--accent);
+  background: linear-gradient(
+    145deg,
+    rgba(56,189,248,0.2),
+    rgba(30,41,59,0.95)
+  );
+  box-shadow: 0 0 35px rgba(56,189,248,0.5);
+  transform: scale(1.06);
+}
+
+/* TITLE */
+.pricing-card h3 {
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+/* PRICE */
+.pricing-card .price {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--accent);
+  margin: 10px 0;
+}
+
+/* FEATURES LIST */
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.pricing-card ul li {
+  color: var(--text-2);
+  margin: 8px 0;
+}
+
+/* BUTTON */
+.pricing-card button {
+  background: var(--accent);
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pricing-card button:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 0 15px var(--accent);
 }
 
 .plan-badge {
@@ -1032,11 +1113,14 @@ nav {
 
 /* ═══════════════════ FOOTER ═══════════════════ */
 footer {
-  background: var(--text);
-  color: rgba(255,255,255,0.75);
+  background: linear-gradient(135deg, rgba(30,41,59,0.9), rgba(2,6,23,0.9)); /* 🔥 gradient glass */
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  color: var(--text-2);
   padding: 56px clamp(16px, 4vw, 48px) 0;
-}
 
+  box-shadow: 0 -5px 30px rgba(56, 189, 248, 0.15); /* 🔵 top glow */
+}
 .footer-inner {
   max-width: 1080px;
   margin: 0 auto;
@@ -1219,11 +1303,7 @@ footer {
   background: var(--accent-light);
 }
 .upload-zone input[type="file"] {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
-  width: 100%; height: 100%;
+  display: none;
 }
 
 .upload-zone-icon {
